@@ -48,6 +48,7 @@ namespace BSIStore.Controllers
         // GET: Produtos/Create
         public IActionResult Create()
         {
+            ViewData["Categorias"] = new SelectList(_context.Categoria, "Id", "Descricao");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace BSIStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Descricao,validade,categoria,preco")] Produto produto)
+        public async Task<IActionResult> Create([Bind("Id,Descricao,validade,categoria,preco,CategoriaId")] Produto produto)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace BSIStore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Categorias"] = new SelectList(_context.Categoria, "Id", "Id", produto.Categoria);
             return View(produto);
         }
 
